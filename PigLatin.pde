@@ -2,15 +2,19 @@ StringList inventory = new StringList();
 
 public void setup() 
 {
-  String[] lines = loadStrings("LowellHymn.txt");
+  String[] lines = loadStrings("words.txt");
   for (int i=0; i<lines.length; i++) {
     inventory.clear();
     separate(lines[i]);
     
-    String blank = new String();
+    //String blank = new String();
     if (inventory.size()!=0) {
-      if (inventory.get(inventory.size()-1).endsWith(",")||inventory.get(inventory.size()-1).endsWith("."))
-        inventory.get(inventory.size()-1).replaceAll(",",blank);
+      for (int k=0; k<inventory.size(); k++)
+        if (inventory.get(k).length() != 0)
+          if (inventory.get(k).charAt(inventory.get(k).length()-1) == ',' || inventory.get(k).charAt(inventory.get(k).length()-1) == '.')
+            inventory.set(k, inventory.get(k).substring(0,inventory.get(k).length()-1));
+          
+        
       for (int j = 0; j < inventory.size(); j++) 
       {
         System.out.print(pigLatin(inventory.get(j))+" ");
@@ -27,7 +31,7 @@ public int findFirstVowel(String sWord)
   //precondition: sWord is a valid String of length greater than 0.
   //postcondition: returns the position of the first vowel in sWord.  If there are no vowels, returns -1
 {
-  for (int i=0; i<sWord.length()-1; i++) {
+  for (int i=0; i<sWord.length(); i++) {
     if (sWord.substring(i, i+1).equals("a") || 
       sWord.substring(i, i+1).equals("e") || 
       sWord.substring(i, i+1).equals("i") || 
@@ -43,9 +47,11 @@ public void separate(String sWord)
   //precondition: sWord is a valid String of length greater than 0.
   //postcondition: returns the position of the first vowel in sWord.  If there are no vowels, returns -1
 {
+  sWord = sWord.toLowerCase();
   int k=0;
   for (int l=0; l<sWord.length(); l++) {
-    if (sWord.substring(l, l+1).equals(" ")) {
+    String blank = new String();
+    if (sWord.substring(l, l+1).equals(" ") || sWord.substring(l, l+1).equals(sWord.substring(l))) {
       inventory.append(sWord.substring(k, l));
       k=l+1;
     }
